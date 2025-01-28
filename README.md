@@ -8,7 +8,7 @@
     subject.subscribe { println(it) }
 ```
 
-## Задача на сетевой запрос и отображение результата - NetworkRequest](https://github.com/ProgramNotWorking/RxJavaHW/blob/master/app/src/main/java/com/example/rxjavahw/tasks/NetworkRequest.kt)
+## Задача на сетевой запрос и отображение результата - [NetworkRequest](https://github.com/ProgramNotWorking/RxJavaHW/blob/master/app/src/main/java/com/example/rxjavahw/tasks/NetworkRequest.kt)
 Сделать сетевой запрос и отобразить результат на экране
 
 ## Задача на таймер, меняющий TextView - [TimerActivity](https://github.com/ProgramNotWorking/RxJavaHW/blob/master/app/src/main/java/com/example/rxjavahw/tasks/TimerActivity.kt)
