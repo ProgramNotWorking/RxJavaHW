@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 fun main() {
 
     /** Задача:
-     *  сделайть сетевой запрос и отобразить результат на экране
+     *  сделать сетевой запрос и отобразить результат на экране
      * **/
 
     sendRequestAndGetResult()

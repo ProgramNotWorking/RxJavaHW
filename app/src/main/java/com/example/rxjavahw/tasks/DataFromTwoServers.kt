@@ -12,27 +12,37 @@ fun main() {
      * Нужно получить эти данные и вывести в единый список
      * **/
 
-    getCombinedData()
+    getCombinedDataDespiteTheRequestFailure()
+    getCombinedDataIfRequestSuccessful()
 
 }
 
+// Функция для получения данных, даже если запросы падают (пункт а задачи)
 @SuppressLint("CheckResult")
-fun getCombinedData() {
-
+fun getCombinedDataDespiteTheRequestFailure() {
     Observable.zip(
-        getDataFromFirstServer(), getDataFromSecondServer()
+        getDataFromFirstServer().onErrorReturn { RequestResult.Error(it) },
+        getDataFromSecondServer().onErrorReturn { RequestResult.Error(it) }
     ) { firstData, secondData ->
         when (firstData) {
             is RequestResult.Success -> {
                 when (secondData) {
                     is RequestResult.Success -> firstData.data + secondData.data
-                    is RequestResult.Error -> firstData.data
+                    is RequestResult.Error -> {
+                        println(secondData.throwable?.message)
+                        firstData.data
+                    }
                 }
             }
+
             is RequestResult.Error -> {
+                println(firstData.throwable?.message)
                 when (secondData) {
                     is RequestResult.Success -> secondData.data
-                    is RequestResult.Error -> emptyList()
+                    is RequestResult.Error -> {
+                        println(secondData.throwable?.message)
+                        emptyList()
+                    }
                 }
             }
         }
@@ -40,6 +50,28 @@ fun getCombinedData() {
         .subscribe { combinedList ->
             println(combinedList)
         }
+}
+
+// Функция для получения данных, если оба запроса выполнены (пункт б задачи)
+@SuppressLint("CheckResult")
+fun getCombinedDataIfRequestSuccessful() {
+    Observable.zip(
+        getDataFromFirstServer(),
+        getDataFromSecondServer()
+    ) { firstData, secondData ->
+        when {
+            firstData is RequestResult.Success && secondData is RequestResult.Success -> {
+                firstData.data + secondData.data
+            }
+
+            else -> throw Exception("One of the request failed")
+        }
+    }
+        .onErrorComplete()
+        .subscribe(
+            { combinedList -> println(combinedList) },
+            { error -> println("Error: ${error.message}") }
+        )
 }
 
 // Имитация получения данных с первого сервера
